@@ -1,0 +1,11 @@
+.balls-navigation {
+    position: relative;
+    background: black;
+
+    .ball {
+        display: block;
+        position: absolute;
+        border-radius: 100%;
+        text-indent: -9999px;
+    }
+}

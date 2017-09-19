@@ -1,0 +1,43 @@
+/**
+ * Main server app
+ */
+
+require('dotenv').config();
+
+const path = require('path');
+const express = require('express');
+const { version, name } = require('../package.json');
+
+function server() {
+    const app = express();
+
+    app.set('views', path.join(__dirname, '../src/templates'));
+    app.set('view engine', 'ejs');
+    app.get('/', (req, res) => {
+        res.render('index', {
+            version,
+            title: name
+        });
+    });
+
+    // serve the react app statically
+    app.use('/', express.static(path.join(__dirname, '../static')));
+
+    // put your API endpoints here (e.g. include an Express router from another file)
+
+    // catch 404
+    app.use((req, res) => {
+        res.status(404).json({ error: true, msg: 'Not found' });
+    });
+
+    const port = process.env.PORT || 3000;
+
+    return new Promise(resolve => {
+        app.listen(port, () => {
+            return resolve({ app, port });
+        });
+    });
+}
+
+module.exports = server;
+

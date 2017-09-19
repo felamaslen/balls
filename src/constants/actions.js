@@ -1,0 +1,2 @@
+export const SOMETHING_SAID = 'SOMETHING_SAID';
+
