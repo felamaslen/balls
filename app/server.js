@@ -2,6 +2,8 @@
  * Main server app
  */
 
+/* eslint-disable global-require */
+
 require('dotenv').config();
 
 const path = require('path');
@@ -22,6 +24,29 @@ function server() {
 
     // serve the react app statically
     app.use('/', express.static(path.join(__dirname, '../static')));
+
+    if (process.env.NODE_ENV === 'development') {
+        const conf = require('../webpack.config')();
+
+        const compiler = require('webpack')(conf);
+
+        app.use(require('webpack-dev-middleware')(compiler, {
+            publicPath: conf.output.publicPath,
+            stats: {
+                colors: true,
+                modules: false,
+                chunks: false,
+                reasons: false
+            },
+            hot: true,
+            quiet: false,
+            noInfo: false
+        }));
+
+        app.use(require('webpack-hot-middleware')(compiler, {
+            log: console.log
+        }));
+    }
 
     // put your API endpoints here (e.g. include an Express router from another file)
 

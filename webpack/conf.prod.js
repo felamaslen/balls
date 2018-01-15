@@ -1,16 +1,37 @@
 const webpack = require('webpack');
+const path = require('path');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackConfig = require('./conf.common');
 const moduleConfigProd = require('./module.prod');
 
-module.exports = Object.assign({}, webpackConfig, {
-    devtool: 'cheap-module-source-map',
-    plugins: webpackConfig.plugins.concat([
+const { version } = require('../package.json');
+
+const envInjectVars = [
+];
+
+const injectedEnvVars = {
+    NODE_ENV: JSON.stringify('production'),
+
+    ...envInjectVars.reduce((vars, name) => {
+        vars[name] = JSON.stringify(process.env[name] || '');
+
+        return vars;
+
+    }, {})
+};
+
+module.exports = (...args) => ({
+    ...webpackConfig,
+    output: {
+        path: path.join(__dirname, '../static'),
+        filename: 'js/bundle.js'
+    },
+    plugins: [
+        ...webpackConfig.plugins(...args),
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
+            'process.env': injectedEnvVars
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -30,9 +51,15 @@ module.exports = Object.assign({}, webpackConfig, {
             cssProcessorOptions: {
                 discardComments: { removeAll: true }
             }
+        }),
+        new HtmlWebpackPlugin({
+            version,
+            externalStyles: true,
+            inject: false,
+            template: 'src/templates/index.ejs'
         })
-    ]),
-    module: moduleConfigProd,
+    ],
+    module: moduleConfigProd(...args),
     bail: true
 });
 

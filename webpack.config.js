@@ -1,19 +1,32 @@
+/* eslint-disable global-require */
 /**
  * Returns webpack configuration objects
  */
 
-require('dotenv').config();
+const dotenv = require('dotenv');
 
-const webpackConfigDevelopment = require('./webpack/conf.dev');
-const webpackConfigProduction = require('./webpack/conf.prod');
-
-function webpackConfig() {
-    if (process.env.NODE_ENV !== 'development') {
-        return webpackConfigProduction;
-    }
-
-    return webpackConfigDevelopment;
+if (process.env.DOTENV_INJECT === 'true' || process.env.NODE_ENV !== 'production') {
+    dotenv.config();
 }
 
-module.exports = webpackConfig();
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const ExtractNormalCSS = new ExtractTextPlugin({
+    filename: 'css/style.css',
+    allChunks: true
+});
+const ExtractFontsCSS = new ExtractTextPlugin({
+    filename: 'css/fonts.css',
+    allChunks: true
+});
+
+function webpackConfig() {
+    if (process.env.NODE_ENV === 'production') {
+        return require('./webpack/conf.prod')(ExtractNormalCSS, ExtractFontsCSS);
+    }
+
+    return require('./webpack/conf.dev')();
+}
+
+module.exports = () => webpackConfig();
 
