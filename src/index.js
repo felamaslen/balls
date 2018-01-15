@@ -1,42 +1,37 @@
-// Client entry point
+/**
+ * Entry point to the web app
+ */
+
+/* eslint-disable global-require */
 
 import 'babel-polyfill';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { StaticRouter, Route, Switch } from 'react-router-dom';
+import { AppContainer } from 'react-hot-loader';
+import { render } from 'react-dom';
 
-// all styles imported here
+import store from './store';
+import Root from './containers/root';
+
 import './sass/index.scss';
+import './sass/fonts.scss';
+import './images/favicon.png';
 
-import getStore from './store';
+function renderApp(RootComponent = Root) {
+    render(
+        <AppContainer>
+            <RootComponent store={store} />
+        </AppContainer>,
+        document.getElementById('root')
+    );
+}
 
-// react redux router object
-import routes from './router';
+renderApp();
 
-// common components
-import Header from './components/Header';
-
-const context = {};
-
-const switchRoutes = routes.map((route, index) => {
-    const routeKey = `route${index}`;
-
-    return <Route key={routeKey} {...route} />;
-});
-
-ReactDOM.render(
-    <div>
-        <Header />
-        <Provider store={getStore()}>
-            <StaticRouter location={window.location.pathname} context={context}>
-                <Switch>
-                    {switchRoutes}
-                </Switch>
-            </StaticRouter>
-        </Provider>
-    </div>,
-    document.getElementById('root')
-);
+if (module.hot) {
+    module.hot.accept(
+        './containers/root',
+        () => renderApp(require('./containers/root').default)
+    );
+}
 

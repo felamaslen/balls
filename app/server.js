@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
-const { version, name } = require('../package.json');
+const { version } = require('../package.json');
 
 function server() {
     const app = express();
@@ -17,13 +17,14 @@ function server() {
     app.set('view engine', 'ejs');
     app.get('/', (req, res) => {
         res.render('index', {
-            version,
-            title: name
+            htmlWebpackPlugin: {
+                options: {
+                    version,
+                    externalStyles: process.env.NODE_ENV !== 'development'
+                }
+            }
         });
     });
-
-    // serve the react app statically
-    app.use('/', express.static(path.join(__dirname, '../static')));
 
     if (process.env.NODE_ENV === 'development') {
         const conf = require('../webpack.config')();
@@ -49,6 +50,9 @@ function server() {
     }
 
     // put your API endpoints here (e.g. include an Express router from another file)
+
+    // serve the react app statically
+    app.use(express.static(path.join(__dirname, '../static')));
 
     // catch 404
     app.use((req, res) => {

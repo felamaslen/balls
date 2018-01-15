@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    font-family: 'Open Sans', cursive, arial, helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 11pt;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.balls-app-outer {
+    display: flex;
+    flex-flow: row;
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
