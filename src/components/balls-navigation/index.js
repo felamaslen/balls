@@ -1,102 +1,83 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { animateBall } from './anim';
+import { navWidth, navHeight, ballRadius } from '../../constants/styles';
 
-// import { animateBall } from '../ballAnim';
+const ANIMATION_SPEED = 5;
 
 class LinkBall extends Component {
     constructor(props) {
         super(props);
 
-        this.posX = Math.random() * 100;
-        this.posY = Math.random() * 100;
-
-        this.direction = Math.random() * 2 * Math.PI;
-        this.speed = 1 + Math.random() * 2;
-
-        this.posX = 0;
-        this.posY = 0;
-        this.direction = Math.PI / 4;
-        this.speed = 10;
-
-        this.ball = null;
-
-        this.lastStepTime = Date.now();
-        this.timerValue = 10;
-        this.timer = setTimeout(() => this.animate(), this.timerValue);
+        this.state = {
+            posX: Math.random() * (navWidth - 2 * ballRadius),
+            posY: Math.random() * (navHeight - 2 * ballRadius),
+            direction: Math.random() * 2 * Math.PI,
+            speed: 1000 * (1 + Math.random() * 2),
+            lastStepTime: Date.now(),
+            timer: setTimeout(() => this.animate(), ANIMATION_SPEED)
+        };
     }
     animate() {
-        if (this.timer) {
-            clearTimeout(this.timer);
+        if (this.state.timer) {
+            clearTimeout(this.state.timer);
         }
 
-        const { shiftX, shiftY } = animateBall({
-            stepTime: Date.now() - this.lastStepTime,
-            speed: this.speed,
-            direction: this.direction,
-            posX: this.posX,
-            posY: this.posY,
-            width: this.props.width,
-            height: this.props.height,
-            ballWidth: this.props.ballWidth,
-            ballHeight: this.props.ballHeight
+        const now = Date.now();
+
+        this.setState({
+            ...animateBall({
+                stepTime: now - this.state.lastStepTime,
+                speed: this.state.speed,
+                direction: this.state.direction,
+                posX: this.state.posX,
+                posY: this.state.posY
+            }),
+            lastStepTime: now,
+            timer: setTimeout(() => this.animate(), ANIMATION_SPEED)
         });
-
-        this.posX += shiftX;
-        this.posY += shiftY;
-
-        this.ball.style.left = `${this.posX}px`;
-        this.ball.style.top = `${this.posY}px`;
-
-        this.lastStepTime = Date.now();
-        this.timer = setTimeout(() => this.animate(), this.timerValue);
+    }
+    componentWillUnmount() {
+        if (this.state.timer) {
+            clearTimeout(this.state.timer);
+        }
     }
     render() {
+        const { to, title, color } = this.props;
+
         const style = {
-            backgroundColor: this.props.color
+            backgroundColor: color,
+            left: `${this.state.posX - ballRadius}px`,
+            top: `${this.state.posY - ballRadius}px`
         };
 
-        const ref = elem => {
-            this.ball = elem;
-        };
-
-        return <a className="link ball"
-            href={this.props.link}
-            ref={ref}
-            style={style}>{this.props.link}</a>;
+        return (
+            <a className="link ball" href={to} style={style}>{title}</a>
+        );
     }
 }
 
 LinkBall.propTypes = {
-    link: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    ballWidth: PropTypes.number.isRequired,
-    ballHeight: PropTypes.number.isRequired
+    to: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired
 };
 
-export default class BallsNavigation extends Component {
-    render() {
-        const linkNames = ['link1']; // , 'link2', 'link3', 'link4'];
+export default function BallsNavigation() {
+    const links = [
+        // { title: 'About', to: '/about', color: '#f00' },
+        // { title: 'Page1', to: '/page1', color: '#0f0' },
+        { title: 'Page2', to: '/page2', color: '#00f' }
+    ];
 
-        const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'violet'];
+    const balls = links.map(({ to, ...link }) => (
+        <LinkBall key={to} to={to} {...link} />
+    ));
 
-        const links = linkNames.map((link, key) => {
-            return <LinkBall width={this.props.width} height={this.props.height}
-                ballWidth={this.props.ballWidth} ballHeight={this.props.ballHeight}
-                key={key} link={link} color={colors[key % colors.length]} />;
-        });
-
-        return <div className="balls-navigation">
-            {links}
-        </div>;
-    }
+    return (
+        <div className="balls-navigation">
+            {balls}
+        </div>
+    );
 }
-
-BallsNavigation.propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    ballWidth: PropTypes.number.isRequired,
-    ballHeight: PropTypes.number.isRequired
-};
 

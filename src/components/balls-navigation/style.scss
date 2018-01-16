@@ -1,10 +1,14 @@
 .balls-navigation {
+    width: $nav-width;
+    height: $nav-height;
     position: relative;
     background: black;
 
     .ball {
         display: block;
         position: absolute;
+        width: ($ballRadius * 2) + px;
+        height: ($ballRadius * 2) + px;
         border-radius: 100%;
         text-indent: -9999px;
     }

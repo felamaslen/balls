@@ -28,18 +28,12 @@ function Page2() {
 }
 
 export default function App() {
-    const links = [
-        { title: 'About', to: '/about', color: '#f00' },
-        { title: 'Page1', to: '/page1', color: '#0f0' },
-        { title: 'Page2', to: '/page2', color: '#00f' }
-    ];
-
     return <div className="balls-app-root">
         <BrowserRouter>
             <div>
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={BallsNavigation} links={links} />
+                    <Route exact path="/" component={BallsNavigation} />
                     <Route exact path="/about" component={About} />
                     <Route exact path="/page1" component={Page1} />
                     <Route exact path="/page2" component={Page2} />
