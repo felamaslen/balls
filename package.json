@@ -13,6 +13,10 @@
   },
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felamaslen/balls"
+  },
   "babel": {
     "env": {
       "production": {
