@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { animateBall } from './anim';
 import { navWidth, navHeight, ballRadius } from '../../constants/styles';
 
-const ANIMATION_SPEED = 5;
+const ANIMATION_SPEED = 10;
+const INITIAL_SPEED = 500;
+const TURN_RATE_CHANGE_PROBABILITY = 0.2;
+const TURN_RATE_CHANGE = Math.PI / 50;
+const TURN_RATE_INITIAL = Math.PI / 200;
+const MAX_TURN_RATE = Math.PI / 100;
 
 class LinkBall extends Component {
     constructor(props) {
@@ -13,7 +18,8 @@ class LinkBall extends Component {
             posX: Math.random() * (navWidth - 2 * ballRadius),
             posY: Math.random() * (navHeight - 2 * ballRadius),
             direction: Math.random() * 2 * Math.PI,
-            speed: 1000 * (1 + Math.random() * 2),
+            speed: INITIAL_SPEED * (1 + Math.random() * 2),
+            turnRate: (2 * Math.random() - 1) * TURN_RATE_INITIAL,
             lastStepTime: Date.now(),
             timer: setTimeout(() => this.animate(), ANIMATION_SPEED)
         };
@@ -25,14 +31,22 @@ class LinkBall extends Component {
 
         const now = Date.now();
 
+        let turnRate = this.state.turnRate;
+        if (Math.random() < TURN_RATE_CHANGE_PROBABILITY) {
+            turnRate = Math.max(MAX_TURN_RATE, Math.min(-MAX_TURN_RATE,
+                (2 * Math.random() - 1) * TURN_RATE_CHANGE
+            ));
+        }
+
         this.setState({
             ...animateBall({
                 stepTime: now - this.state.lastStepTime,
                 speed: this.state.speed,
-                direction: this.state.direction,
+                direction: this.state.direction + this.state.turnRate,
                 posX: this.state.posX,
                 posY: this.state.posY
             }),
+            turnRate,
             lastStepTime: now,
             timer: setTimeout(() => this.animate(), ANIMATION_SPEED)
         });
