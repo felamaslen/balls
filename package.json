@@ -8,7 +8,7 @@
     "postinstall": "NODE_ENV=production ./node_modules/.bin/webpack",
     "start": "NODE_ENV=production node ./app/index.js",
     "dev": "NODE_ENV=development nodemon -w ./app ./app/index.js",
-    "test": "./node_modules/.bin/mocha --require babel-core/register \"./test/**/*.spec.js\" --bail --reporter spec",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --require babel-core/register \"./test/**/*.spec.js\" --bail --reporter spec",
     "lint": "./node_modules/.bin/eslint webpack.config.js webpack app src test"
   },
   "author": "",
