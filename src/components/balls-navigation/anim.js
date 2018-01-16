@@ -1,11 +1,11 @@
 import { navWidth, navHeight, ballRadius } from '../../constants/styles';
 
-const WALL_LEFT = 0;
-const WALL_TOP = 1;
-const WALL_RIGHT = 2;
-const WALL_BOTTOM = 3;
+export const WALL_LEFT = 0;
+export const WALL_TOP = 1;
+export const WALL_RIGHT = 2;
+export const WALL_BOTTOM = 3;
 
-export const polarToEuclidean = (distance, direction) => ([
+const polarToEuclidean = (distance, direction) => ([
     distance * Math.cos(direction),
     distance * Math.sin(direction)
 ]);

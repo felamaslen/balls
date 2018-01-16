@@ -111,3 +111,4 @@ describe('<Page2 />', () => {
         expect(wrapper.childAt(0).text()).to.equal('Page 2');
     });
 });
+

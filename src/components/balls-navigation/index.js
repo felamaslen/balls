@@ -11,7 +11,7 @@ const TURN_RATE_CHANGE = Math.PI / 50;
 const TURN_RATE_INITIAL = Math.PI / 200;
 const MAX_TURN_RATE = Math.PI / 100;
 
-class LinkBall extends Component {
+export class LinkBall extends Component {
     constructor(props) {
         super(props);
 
