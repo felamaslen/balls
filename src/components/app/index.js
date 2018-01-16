@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Header from '../header';
 import BallsNavigation from '../balls-navigation';
 
-function About() {
+export function About() {
     return (
         <div className="page page-about">
             <h1>{'About'}</h1>
@@ -12,7 +12,7 @@ function About() {
     );
 }
 
-function Page1() {
+export function Page1() {
     return (
         <div className="page page-1">
             <h1>{'Page 1'}</h1>
@@ -20,7 +20,7 @@ function Page1() {
     );
 }
 
-function Page2() {
+export function Page2() {
     return (
         <div className="page page-2">
             <h1>{'Page 2'}</h1>
