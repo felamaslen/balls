@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { animateBall } from './anim';
 import { navWidth, navHeight, ballRadius } from '../../constants/styles';
 
 const ANIMATION_SPEED = 10;
-const INITIAL_SPEED = 500;
+const INITIAL_SPEED = 100;
 const TURN_RATE_CHANGE_PROBABILITY = 0.2;
 const TURN_RATE_CHANGE = Math.PI / 50;
 const TURN_RATE_INITIAL = Math.PI / 200;
@@ -66,7 +67,7 @@ class LinkBall extends Component {
         };
 
         return (
-            <a className="link ball" href={to} style={style}>{title}</a>
+            <Link className="link ball" to={to} style={style}>{title}</Link>
         );
     }
 }
@@ -79,8 +80,8 @@ LinkBall.propTypes = {
 
 export default function BallsNavigation() {
     const links = [
-        // { title: 'About', to: '/about', color: '#f00' },
-        // { title: 'Page1', to: '/page1', color: '#0f0' },
+        { title: 'About', to: '/about', color: '#f00' },
+        { title: 'Page1', to: '/page1', color: '#0f0' },
         { title: 'Page2', to: '/page2', color: '#00f' }
     ];
 

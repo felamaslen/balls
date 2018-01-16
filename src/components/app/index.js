@@ -1,6 +1,7 @@
+import { Router, Route, Switch } from 'react-router-dom';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from '../header';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import BallsNavigation from '../balls-navigation';
 
 function About() {
@@ -27,9 +28,9 @@ function Page2() {
     );
 }
 
-export default function App() {
+export default function App({ history }) {
     return <div className="balls-app-root">
-        <BrowserRouter>
+        <Router history={history}>
             <div>
                 <Header />
                 <Switch>
@@ -39,7 +40,11 @@ export default function App() {
                     <Route exact path="/page2" component={Page2} />
                 </Switch>
             </div>
-        </BrowserRouter>
+        </Router>
     </div>;
 }
+
+App.propTypes = {
+    history: PropTypes.object.isRequired
+};
 

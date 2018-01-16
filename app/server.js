@@ -15,16 +15,6 @@ function server() {
 
     app.set('views', path.join(__dirname, '../src/templates'));
     app.set('view engine', 'ejs');
-    app.get('/', (req, res) => {
-        res.render('index', {
-            htmlWebpackPlugin: {
-                options: {
-                    version,
-                    externalStyles: process.env.NODE_ENV !== 'development'
-                }
-            }
-        });
-    });
 
     if (process.env.NODE_ENV === 'development') {
         const conf = require('../webpack.config')();
@@ -52,7 +42,18 @@ function server() {
     // put your API endpoints here (e.g. include an Express router from another file)
 
     // serve the react app statically
-    app.use(express.static(path.join(__dirname, '../static')));
+    app.use('/', express.static(path.join(__dirname, '../static')));
+
+    app.get('/*', (req, res) => {
+        res.render('index', {
+            htmlWebpackPlugin: {
+                options: {
+                    version,
+                    externalStyles: process.env.NODE_ENV !== 'development'
+                }
+            }
+        });
+    });
 
     // catch 404
     app.use((req, res) => {

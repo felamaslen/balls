@@ -1,6 +1,6 @@
 module.exports = {
     navWidth: 500,
     navHeight: 300,
-    ballRadius: 20
+    ballRadius: 40
 };
 
